@@ -2,6 +2,8 @@
 name: "kibana"
 packages:
   - "kibana"
+  - "route-registrar"
+
 templates:
   bin/kibana_ctl: "bin/kibana_ctl"
   config/kibana.conf.erb: "config/kibana.conf"
@@ -9,6 +11,10 @@ templates:
   data/properties.sh.erb: "data/properties.sh"
   helpers/ctl_setup.sh: "helpers/ctl_setup.sh"
   helpers/ctl_utils.sh: "helpers/ctl_utils.sh"
+  registrar_settings.yml.erb: config/registrar_settings.yml
+  route-registrar_ctl.erb: bin/route-registrar_ctl
+  healthcheck.sh.erb: bin/healthcheck.sh
+
 properties:
   kibana.elasticsearch:
     description: "IP address and port of api host to send elasticsearch requests to (eg, 127.0.0.1:80)"
@@ -28,3 +34,17 @@ properties:
   kibana.shard_timeout:
     description: "Time in milliseconds for Elasticsearch to wait for responses from shards. Set to 0 to disable"
     default: 30000
+
+  kibana.external_host:
+    description: 'Host used to register a route for the broker with the router in cf-release via NATS. By registering the broker with Cloud Foundry using this route, and using the router for load balancing, the broker can be horizontally scaled. Domain is typically the same as system domain in cf-release.'
+
+  nats.user:
+    description: 'Username for broker to register a route with NATS'
+  nats.password:
+    description: 'Password for broker to register a route with NATS'
+  nats.port:
+    description: 'IP port of Cloud Foundry NATS server'
+  nats.machines:
+    description: 'IP of each NATS cluster member.'
+  external_host:
+    description: 'Host used to register a route for the broker with the router in cf-release via NATS. By registering the broker with Cloud Foundry using this route, and using the router for load balancing, the broker can be horizontally scaled. Domain is typically the same as system domain in cf-release.'
